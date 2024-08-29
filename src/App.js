@@ -1,13 +1,11 @@
 import AppRoutes from "./Components/Layout/Routes/AppRoutes";
-
-
-
+import React from "react";
 
 function App() {
   return (
-<AppRoutes/>
- 
- 
+    <React.Fragment>
+      <AppRoutes/>
+    </React.Fragment>
   );
 }
 

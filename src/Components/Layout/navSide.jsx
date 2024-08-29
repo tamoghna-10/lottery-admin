@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const NavSide = () => {
   return (
@@ -21,9 +22,8 @@ const NavSide = () => {
         </div>
       </a>
       <ul>
-        <li><a href="index_2.html">Lottery Markets</a></li>
-        {/* <li><a href="index_3.html">Dark Sidebar</a></li>
-        <li><a href="index.html">Light Sidebar</a></li> */}
+        <li><Link to="/lottery-markets">Lottery Markets</Link></li>
+   
       </ul>
     </li>
     <li className>
