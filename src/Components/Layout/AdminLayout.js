@@ -21,7 +21,7 @@ const AdminLayout = () => {
     <div className="d-flex flex-grow-1 overflow-hidden p-5">
       {/* Sidebar */}
       <div
-        className="flex-shrink-0 "
+        className="flex-shrink-0"
         style={{
           width: '250px',
           maxWidth: '250px',
