@@ -1,12 +1,17 @@
 import React, { useState } from "react";
-import "bootstrap/dist/js/bootstrap.bundle.min"; // Ensure Bootstrap JS is include
+import "bootstrap/dist/js/bootstrap.bundle.min"; // Ensure Bootstrap JS is included
 import SingleCard from "../Common/SingleCard";
 import Pagination from "../Common/Pagination";
+import CustomModal from "../Common/modal";
+import DearLotteryCard from "../Common/DearLotteryCard";
 
 const LotteryMarkets = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 10; // Set this based on your data
   const [entries, setEntries] = useState(10); // Number of entries dropdown
+  const [showModal, setShowModal] = useState(false);
+  const [randomToken, setRandomToken] = useState("");
+  const [lotteryCards, setLotteryCards] = useState([]);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -18,9 +23,40 @@ const LotteryMarkets = () => {
     // Handle entries per page change here
   };
 
+  const handleCreateMarketClick = () => {
+    // Generate a random 12-character alphanumeric string
+    const token = Math.random().toString(36).substring(2, 14).toUpperCase();
+    setRandomToken(token);
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+
+  const handleCreateMarket = () => {
+    console.log("Market created with token:", randomToken);
+
+    // Generate a list of Dear Lottery cards
+    const newLotteryCards = Array.from({ length: 15 }, (_, index) => ({
+      id: index + 1,
+      lotteryName: `Dear Lottery ${index + 1}`,
+      drawDate: "2024-09-15",
+      prizeAmount: (Math.random() * 1000000).toFixed(2),
+      serialNumber: `DL-${Math.random()
+        .toString(36)
+        .substring(2, 10)
+        .toUpperCase()}`,
+    }));
+
+    // Update the state to display the cards
+    setLotteryCards(newLotteryCards);
+    setShowModal(false);
+  };
+
   return (
     <SingleCard>
-      <SingleCard style={{}}>
+      <SingleCard>
         <div className="d-flex justify-content-between align-items-center mb-3">
           {/* Search Bar */}
           <div className="input-group" style={{ maxWidth: "300px" }}>
@@ -35,17 +71,18 @@ const LotteryMarkets = () => {
                 backgroundColor: "#e6f7ff",
                 border: "1px solid #4682B4",
               }}
+              onClick={handleCreateMarketClick}
             >
               <i className="fas fa-plus" style={{ color: "#4682B4" }}></i>
             </button>
             <span style={{ color: "#4682B4", fontWeight: "bold" }}>
-              Create Market
+              Generate Token
             </span>
           </div>
 
           {/* Entries Dropdown */}
           <div className="input-group" style={{ maxWidth: "150px" }}>
-            <select className="form-select">
+            <select className="form-select" onChange={handleEntriesChange} value={entries}>
               <option value="10">10 entries</option>
               <option value="25">25 entries</option>
               <option value="50">50 entries</option>
@@ -54,190 +91,35 @@ const LotteryMarkets = () => {
         </div>
       </SingleCard>
       <SingleCard>
-        <div className="default-according arrow_style" id="accordionoc">
-          <div className="card">
-            <div className="card-header parpel_bg ">
-              <h5 className="mb-0">
-                <button
-                  className="btn text_white collapsed"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#collapseicon"
-                  aria-expanded="false"
-                  aria-controls="collapse11"
-                >
-                  <i className="far fa-user-circle me-2" /> Demo Lottery Game
-                  <span className="digits">1</span>
-                </button>
-              </h5>
-            </div>
-            <div
-              className="collapse"
-              id="collapseicon"
-              aria-labelledby="collapseicon"
-              data-parent="#accordionoc"
-              style={{}}
-            >
-              <div className="card-body">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life
-                accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                non cupidatat skateboard dolor brunch. Food truck quinoa
-                nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                put a bird on it squid single-origin coffee nulla assumenda
-                shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore
-                wes anderson cred nesciunt sapiente ea proident. Ad vegan
-                excepteur butcher vice lomo. Leggings occaecat craft beer
-                farm-to-table, raw denim aesthetic synth nesciunt you probably
-                haven't heard of them accusamus labore sustainable VHS.
+        <div className="container">
+          <div className="row justify-content-center">
+            {lotteryCards.map((card) => (
+              <div className="col-md-4 mb-4" key={card.id}>
+                <DearLotteryCard
+                  lotteryName={card.lotteryName}
+                  drawDate={card.drawDate}
+                  prizeAmount={card.prizeAmount}
+                  serialNumber={card.serialNumber}
+                />
               </div>
-            </div>
-          </div>
-          <div className="card">
-            <div className="card-header parpel_bg ">
-              <h5 className="mb-0">
-                <button
-                  className="btn collapsed text_white"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#collapseicon1"
-                  aria-expanded="false"
-                >
-                  <i className="far fa-user-circle me-2" /> Demo Lottery Game
-                  <span className="digits">2</span>
-                </button>
-              </h5>
-            </div>
-            <div
-              className="collapse"
-              id="collapseicon1"
-              aria-labelledby="headingeight"
-              data-parent="#accordionoc"
-            >
-              <div className="card-body">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life
-                accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                non cupidatat skateboard dolor brunch. Food truck quinoa
-                nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                put a bird on it squid single-origin coffee nulla assumenda
-                shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore
-                wes anderson cred nesciunt sapiente ea proident. Ad vegan
-                excepteur butcher vice lomo. Leggings occaecat craft beer
-                farm-to-table, raw denim aesthetic synth nesciunt you probably
-                haven't heard of them accusamus labore sustainable VHS.
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <div className="card-header parpel_bg ">
-              <h5 className="mb-0">
-                <button
-                  className="btn collapsed text_white"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#collapseicon2"
-                  aria-expanded="false"
-                  aria-controls="collapseicon2"
-                >
-                  <i className="far fa-user-circle me-2" /> Demo Lottery Game
-                  <span className="digits">3</span>
-                </button>
-              </h5>
-            </div>
-            <div
-              className="collapse"
-              id="collapseicon2"
-              data-parent="#accordionoc"
-            >
-              <div className="card-body">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life
-                accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                non cupidatat skateboard dolor brunch. Food truck quinoa
-                nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                put a bird on it squid single-origin coffee nulla assumenda
-                shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore
-                wes anderson cred nesciunt sapiente ea proident. Ad vegan
-                excepteur butcher vice lomo. Leggings occaecat craft beer
-                farm-to-table, raw denim aesthetic synth nesciunt you probably
-                haven't heard of them accusamus labore sustainable VHS.
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <div className="card-header parpel_bg ">
-              <h5 className="mb-0">
-                <button
-                  className="btn collapsed text_white"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#collapseicon3"
-                  aria-expanded="false"
-                  aria-controls="collapseicon3"
-                >
-                  <i className="far fa-user-circle me-2" /> Demo Lottery Game
-                  <span className="digits">4</span>
-                </button>
-              </h5>
-            </div>
-            <div
-              className="collapse"
-              id="collapseicon3"
-              data-parent="#accordionoc"
-            >
-              <div className="card-body">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life
-                accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                non cupidatat skateboard dolor brunch. Food truck quinoa
-                nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                put a bird on it squid single-origin coffee nulla assumenda
-                shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore
-                wes anderson cred nesciunt sapiente ea proident. Ad vegan
-                excepteur butcher vice lomo. Leggings occaecat craft beer
-                farm-to-table, raw denim aesthetic synth nesciunt you probably
-                haven't heard of them accusamus labore sustainable VHS.
-              </div>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card-header parpel_bg ">
-              <h5 className="mb-0">
-                <button
-                  className="btn collapsed text_white"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#collapseicon4"
-                  aria-expanded="false"
-                  aria-controls="collapseicon4"
-                >
-                  <i className="far fa-user-circle me-2" /> Demo Lottery Game
-                  <span className="digits">5</span>
-                </button>
-              </h5>
-            </div>
-            <div
-              className="collapse"
-              id="collapseicon4"
-              data-parent="#accordionoc"
-            >
-              <div className="card-body">
-                Anim pariatur cliche reprehenderit, enim eiusmod high life
-                accusamus terry richardson ad squid. 3 wolf moon officia aute,
-                non cupidatat skateboard dolor brunch. Food truck quinoa
-                nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                put a bird on it squid single-origin coffee nulla assumenda
-                shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore
-                wes anderson cred nesciunt sapiente ea proident. Ad vegan
-                excepteur butcher vice lomo. Leggings occaecat craft beer
-                farm-to-table, raw denim aesthetic synth nesciunt you probably
-                haven't heard of them accusamus labore sustainable VHS.
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </SingleCard>
 
       <div style={{ marginTop: "20px" }}>
-        {" "}
-        {/* Adjust the margin value as needed */}
         <Pagination
           totalPages={totalPages}
           currentPage={currentPage}
           onPageChange={handlePageChange}
+        />
+        <CustomModal
+          showModal={showModal}
+          onClose={handleModalClose}
+          heading="Token Generated"
+          bodyContent={`Your token is: ${randomToken}`}
+          buttonLabel="Create Market"
+          onButtonClick={handleCreateMarket}
         />
       </div>
     </SingleCard>
